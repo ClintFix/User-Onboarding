@@ -90,7 +90,16 @@ useEffect(() => {
         formErrors = {formErrors}
       />
       {
-        users.map()
+        users.map(user => {
+          return (
+            <div>
+              <h3>{user.name}</h3>
+              <p>{`Email: ${user.email}`}</p>
+              <p>{`Password: ${user.password}`}</p>
+              <p>{`Accepted Terms: ${user.terms}`}</p>
+            </div>
+          )
+        })
       }
     </div>
   );
