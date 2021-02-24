@@ -1,23 +1,45 @@
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react'
+import Form from './components/Form'
 import './App.css';
 
+// Initial Conditions for State
+const initialUsers = [
+  {name: 'Joe',email: 'joe@schmoe.com', password: 'password1', terms: true}
+]
+
+const initialFormValues = {
+  name: '', email: '', password: '', terms: false,
+}
+
+const initialFormErrors = {
+  name: '',
+  email: '',
+  password: '',
+  terms: '',
+}
+
+const initialDisabled = true;
+
+///////// APP Component ////////////
+
 function App() {
+// State
+const [user, newUser] = useState(initialUsers) //Array of user objects
+const [formValues, setFormValues] = useState(initialFormValues) //object
+const [formErrors, setFormErrors] = useState(initialFormErrors) //object
+const [disabled, setDisabled] = useState(initialDisabled) //boolean
+
+// Helper functions
+
+// Event handlers
+
+// Side effects
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Form />
     </div>
   );
 }
