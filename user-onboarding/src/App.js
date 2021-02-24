@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react'
 import Form from './components/Form'
 import './App.css';
 import Axios from 'axios';
+import formSchema from './validation/formSchema'
+import * as yup from 'yup'
 
 // Initial Conditions for State
 const initialUsers = [
@@ -39,10 +41,11 @@ const postNewUser = newUser => {
   // reset form values
   Axios.post('https://reqres.in/api/users', newUser)
     .then(res => {
-
+      setUsers([res.data, ...users]); //spread in current users, after new user added to array. Set to state
+      console.log(res)
     })
     .catch(err => {
-
+      console.log(`Error with axios post: ${err}`);
     })
   setFormValues(initialFormValues)
 }
@@ -55,8 +58,18 @@ const postNewUser = newUser => {
 // validate (pass value to validate)
 // .then (no errors), update formErrors
 // .catch (errors), update formErrors with new error
+//set formvalues (spread formvalues and then add name: value)
 const onFormChange = (name, value) => {
+  yup.reach(formSchema, name)
+    .validate(value)
+    .then(() => {
+      setFormErrors({...formErrors, [name]: ''})
+    })
+    .catch(err => {
+      setFormErrors({...formErrors, [name]: err.errors[0]})
+    })
 
+    setFormValues({...formValues, [name]: value})
 }
 
 // formSubmit
@@ -76,7 +89,10 @@ const formSubmit = () => {
 // disabled button - updates on formValues change. 
 // .isValid returns promise. if true, enable button
 useEffect(() => {
-
+  formSchema.isValid(formValues)
+    .then(valid => {
+      setDisabled(!valid)
+    })
 }, [formValues])
 
 // JSX //
@@ -92,7 +108,7 @@ useEffect(() => {
       {
         users.map(user => {
           return (
-            <div>
+            <div className = {user.id}>
               <h3>{user.name}</h3>
               <p>{`Email: ${user.email}`}</p>
               <p>{`Password: ${user.password}`}</p>
